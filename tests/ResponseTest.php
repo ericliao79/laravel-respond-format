@@ -1,6 +1,6 @@
 <?php
 
-namespace maras0830\laravelRespondFormat\Tests;
+namespace Eric\laravelRespondFormat\Tests;
 
 use Illuminate\Console\Application;
 use Illuminate\Http\JsonResponse;
