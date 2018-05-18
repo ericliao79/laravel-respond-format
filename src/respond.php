@@ -1,5 +1,4 @@
 <?php
-
 CONST SUCCESS_STATUS = 'success';
 CONST NOT_FOUND_STATUS = 'not_found';
 CONST TOKEN_REQUIRED = 'token_required';
@@ -7,7 +6,7 @@ CONST MEMBER_NOT_FOUND = 'member_not_found';
 CONST INPUT_IS_REQUIRED = 'input_required';
 CONST INVALID_FORM_DATA = 'invalid_form_data';
 CONST INVALID_APP_KEY = 'invalid_app_key';
-
+CONST FORBIDDEN = 'forbidden';
 CONST SUCCESS_CODE = 200; //Symfony\Component\HttpFoundation\Response::HTTP_OK;
 CONST NOT_FOUND_CODE = 404; //Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND;
 CONST TOKEN_REQUIRED_CODE = 203; //Symfony\Component\HttpFoundation\Response::HTTP_NON_AUTHORITATIVE_INFORMATION;
@@ -15,8 +14,9 @@ CONST MEMBER_NOT_FOUND_CODE = 404; //Symfony\Component\HttpFoundation\Response::
 CONST INPUT_IS_REQUIRED_CODE = 422; //Symfony\Component\HttpFoundation\Response::HTTP_UNPROCESSABLE_ENTITY;
 CONST INVALID_FORM_DATA_CODE = 422; //Symfony\Component\HttpFoundation\Response::HTTP_UNPROCESSABLE_ENTITY;
 CONST INVALID_APP_KEY_CODE = 403;
+CONST FORBIDDEN_CODE = 403;
 
-if (! function_exists('respond')) {
+if (!function_exists('respond')) {
     function respond($data, array $error = [], ...$meta)
     {
         $response = [];
@@ -29,12 +29,11 @@ if (! function_exists('respond')) {
 
         if (!empty($meta))
             $response['meta'] = array_collapse($meta);
-
-        return new Illuminate\Http\JsonResponse($response,200);
+        return new Illuminate\Http\JsonResponse($response, SUCCESS_CODE);
     }
 }
 
-if (! function_exists('not_found')) {
+if (!function_exists('not_found')) {
     /**
      * @return Illuminate\Http\JsonResponse
      */
@@ -44,7 +43,7 @@ if (! function_exists('not_found')) {
     }
 }
 
-if (! function_exists('error_format')) {
+if (!function_exists('error_format')) {
     function error_format(string $message, int $code, string $type, ...$data)
     {
         $error_response = [
@@ -52,14 +51,12 @@ if (! function_exists('error_format')) {
             "code" => $code,
             "type" => $type
         ];
-
         $error_response = !empty($data) ? array_merge($error_response, array_collapse($data)) : $error_response;
-
         return $error_response;
     }
 }
 
-if (! function_exists('input_is_required')) {
+if (!function_exists('input_is_required')) {
     /**
      * @param $data
      * @return Illuminate\Http\JsonResponse
@@ -70,8 +67,7 @@ if (! function_exists('input_is_required')) {
     }
 }
 
-
-if (! function_exists('token_required')) {
+if (!function_exists('token_required')) {
     /**
      * @return Illuminate\Http\JsonResponse
      */
@@ -81,7 +77,7 @@ if (! function_exists('token_required')) {
     }
 }
 
-if (! function_exists('app_key_invalid')) {
+if (!function_exists('app_key_invalid')) {
     /**
      * @return Illuminate\Http\JsonResponse
      */
@@ -91,7 +87,7 @@ if (! function_exists('app_key_invalid')) {
     }
 }
 
-if (! function_exists('member_not_found')) {
+if (!function_exists('member_not_found')) {
     /**
      * @return Illuminate\Http\JsonResponse
      */
@@ -101,7 +97,7 @@ if (! function_exists('member_not_found')) {
     }
 }
 
-if (! function_exists('form_data_invalid')) {
+if (!function_exists('form_data_invalid')) {
     /**
      * @param array $data
      * @return Illuminate\Http\JsonResponse
@@ -112,4 +108,9 @@ if (! function_exists('form_data_invalid')) {
     }
 }
 
-
+if (!function_exists('')) {
+    function forbidden($data = []): Illuminate\Http\JsonResponse
+    {
+        return respond([], error_format('Forbidden.', FORBIDDEN_CODE, FORBIDDEN, $data));
+    }
+}
